@@ -37,19 +37,19 @@ A seguir, são apresentados alguns mockups de interface como um guia. Fique à v
 
 ![Listagem de Alunos](/mockups/ios_icon.png)
 
-* Splash screen
-![Listagem de Alunos](/mockups/splash.png)
+* Splash screen  
+![Listagem de Alunos](/mockups/splash.png)  
 
-* Login
-![Listagem de Alunos](/mockups/login.png)
+* Login  
+![Listagem de Alunos](/mockups/login.png)  
 
-* Cadastrar aluno
-![Listagem de Alunos](/mockups/student.png)
+* Cadastrar aluno  
+![Listagem de Alunos](/mockups/student.png)  
 
-* Editar/Excluir Aluno
-![Listagem de Alunos](/mockups/edit_student.png)
+* Editar/Excluir Aluno  
+![Listagem de Alunos](/mockups/edit_student.png)  
 
-![Listagem de Alunos](/mockups/list_student.png)
+![Listagem de Alunos](/mockups/list_student.png)  
 
 ## Histórias do Usuário
 - **Sendo** um usuário administrativo da Instituição
@@ -186,6 +186,7 @@ exemplo de response:
 ```
 
 GET - https://653c0826d5d6790f5ec7c664.mockapi.io/api/v1/login
+
 GET - https://653c0826d5d6790f5ec7c664.mockapi.io/api/v1/login/:id
 
 DELETE - https://653c0826d5d6790f5ec7c664.mockapi.io/api/v1/login/:id
@@ -221,6 +222,7 @@ exemplo de response:
 ```
 
 GET - https://653c0826d5d6790f5ec7c664.mockapi.io/api/v1/student
+
 GET - https://653c0826d5d6790f5ec7c664.mockapi.io/api/v1/student/:id
 
 DELETE - https://653c0826d5d6790f5ec7c664.mockapi.io/api/v1/student/:id
