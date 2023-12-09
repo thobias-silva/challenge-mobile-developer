@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/routes/routes.dart';
+import 'students_page.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -18,7 +21,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void onAddStudentPressed() {
-    Navigator.of(context).pop();
+    pageController.jumpToPage(0);
+    Navigator.of(context)
+      ..pop()
+      ..pushNamed(Routes.student);
   }
 
   void onDestinationSelected(BuildContext context, int index) {
@@ -50,7 +56,7 @@ class _HomePageState extends State<HomePage> {
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
         children: const [
-          _Home(),
+          StudentsPage(),
           Center(child: Text('Ajuda')),
           Center(child: Text('Notificações')),
           Center(child: Text('Perfil')),
@@ -83,25 +89,6 @@ class _HomePageState extends State<HomePage> {
             ],
           );
         },
-      ),
-    );
-  }
-}
-
-class _Home extends StatelessWidget {
-  const _Home();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
-      body: Center(
-        child: FilledButton(
-          onPressed: () {},
-          child: const Text('Alunos'),
-        ),
       ),
     );
   }
