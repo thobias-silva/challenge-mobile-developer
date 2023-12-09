@@ -29,5 +29,16 @@ ThemeData lightTheme() {
         color: _colorScheme.primary,
       ),
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: _colorScheme.primary,
+      foregroundColor: _colorScheme.onPrimary,
+    ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: _colorScheme.primary,
+      foregroundColor: _colorScheme.onPrimary,
+      iconTheme: IconThemeData(
+        color: _colorScheme.onPrimary,
+      ),
+    ),
   );
 }
