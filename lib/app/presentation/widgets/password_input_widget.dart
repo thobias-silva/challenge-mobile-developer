@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class PasswordInput extends StatefulWidget {
-  final void Function(String?) onChanged;
+  final void Function(String) onChanged;
+  final String? errorText;
 
   const PasswordInput({
     super.key,
     required this.onChanged,
+    this.errorText,
   });
 
   @override
@@ -26,6 +28,7 @@ class _PasswordInputState extends State<PasswordInput> {
       obscureText: _obscureText,
       obscuringCharacter: '*',
       decoration: InputDecoration(
+        errorText: widget.errorText,
         labelText: 'Senha',
         prefixIcon: const Icon(Icons.lock_outline),
         suffixIcon: IconButton(
