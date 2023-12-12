@@ -7,6 +7,7 @@ import 'package:mobile_challenge/app/domain/repositories/authentication_reposito
 import 'package:mobile_challenge/core/errors/exceptions.dart';
 import 'package:mobile_challenge/core/errors/failures.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../builders/entities/user_entity_builder.dart';
 
@@ -105,6 +106,52 @@ void main() {
 
         expect(resultOrError.isLeft(), true);
         expect(resultOrError.fold(id, id), isA<ServerFailure>());
+      });
+    });
+
+    group('isLogged -', () {
+      test('should return true when saved id is equal from api', () async {
+        SharedPreferences.setMockInitialValues(
+            {AuthenticationRepositoryImpl.userLoggedKey: '1'});
+
+        when(() => httpClient.get<Map<String, dynamic>>(any()))
+            .thenAnswer((_) async => {'id': '1'});
+
+        final result = await sut.isLogged();
+
+        expect(result, isTrue);
+      });
+
+      test('should return false when saved id is null', () async {
+        SharedPreferences.setMockInitialValues({});
+
+        final result = await sut.isLogged();
+
+        expect(result, isFalse);
+      });
+
+      test('should return false when api return null', () async {
+        SharedPreferences.setMockInitialValues(
+            {AuthenticationRepositoryImpl.userLoggedKey: '1'});
+
+        when(() => httpClient.get<Map<String, dynamic>>(any()))
+            .thenAnswer((_) async => null);
+
+        final result = await sut.isLogged();
+
+        expect(result, isFalse);
+      });
+
+      test('should return false when id not equal', () async {
+        SharedPreferences.setMockInitialValues(
+            {AuthenticationRepositoryImpl.userLoggedKey: '1'});
+
+        when(() => httpClient.get<Map<String, dynamic>>(any()))
+            .thenAnswer((_) async => {'id': '123'});
+
+        final result = await sut.isLogged();
+
+        expect(result, isFalse);
       });
     });
   });
