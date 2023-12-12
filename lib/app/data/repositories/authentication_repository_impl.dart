@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/errors/exceptions.dart';
 import '../../../core/errors/failures.dart';
@@ -10,6 +11,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final HTTPClientAdapter _httpClient;
 
   const AuthenticationRepositoryImpl(this._httpClient);
+
+  static const String _userLoggedKey = 'userLogged';
 
   @override
   Future<Either<Failure, User>> login(String email, String password) async {
@@ -27,6 +30,10 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       }
 
       final user = User.fromMap(response);
+
+      final sharedPrefs = await SharedPreferences.getInstance();
+
+      await sharedPrefs.setString(_userLoggedKey, user.id);
 
       return Right(user);
     } on ServerException {
