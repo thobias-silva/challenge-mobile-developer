@@ -38,6 +38,9 @@ dependencies:
   dio: ^5.4.0
   dartz: ^0.10.1
   shared_preferences: ^2.2.2
+  mobx: ^2.2.3
+  flutter_mobx: ^2.2.0+1
+  get_it: ^7.6.4
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +53,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   mocktail: ^1.0.1
+  mobx_codegen: ^2.4.0
+  build_runner: ^2.4.7
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
