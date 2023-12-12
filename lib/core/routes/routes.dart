@@ -10,7 +10,7 @@ abstract class Routes {
   static const String home = '/home';
   static const String student = '/student';
 
-  static String get initial => home;
+  static String get initial => login;
 
   static Map<String, WidgetBuilder> routes = {
     splash: (context) => const Placeholder(),

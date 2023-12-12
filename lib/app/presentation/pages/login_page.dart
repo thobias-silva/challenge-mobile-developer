@@ -1,10 +1,32 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
+import '../../../core/routes/routes.dart';
+import '../../../injection_container.dart';
+import '../stores/login_store.dart';
 import '../widgets/password_input_widget.dart';
+import '../widgets/primary_button_widget.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final LoginStore store = LoginStore(sl());
+
+  void doLogin() async {
+    final navigator = Navigator.of(context);
+
+    final result = await store.login();
+
+    if (!result) return;
+
+    navigator.pushReplacementNamed(Routes.home);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,31 +39,39 @@ class LoginPage extends StatelessWidget {
             children: [
               Flexible(child: Image.asset('assets/icon.png')),
               const SizedBox(height: 24),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Usuário',
-                      prefixIcon: Icon(Icons.person_outline),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  PasswordInput(
-                    onChanged: (value) {},
-                  ),
-                  const _RecoveryOptions(),
-                  const SizedBox(height: 16),
-                  FilledButton(
-                    onPressed: () {},
-                    child: const Text('Entrar'),
-                  ),
-                  OutlinedButton(
-                    onPressed: () {},
-                    child: const Text('Cadastrar'),
-                  ),
-                ],
-              )
+              Observer(
+                builder: (context) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextFormField(
+                        onChanged: (value) => store.email = value,
+                        decoration: InputDecoration(
+                          labelText: 'E-mail',
+                          errorText: store.failure != null ? '' : null,
+                          prefixIcon: const Icon(Icons.person_outline),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      PasswordInput(
+                        onChanged: (value) => store.password = value,
+                        errorText: store.failure?.message,
+                      ),
+                      const _RecoveryOptions(),
+                      const SizedBox(height: 16),
+                      PrimaryButton(
+                        onPressed: doLogin,
+                        title: 'Entrar',
+                        isLoading: store.isLoading,
+                      ),
+                      OutlinedButton(
+                        onPressed: () => print('Cadastrar'),
+                        child: const Text('Cadastrar'),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ],
           ),
         ),
