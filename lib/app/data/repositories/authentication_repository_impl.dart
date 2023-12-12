@@ -12,7 +12,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   const AuthenticationRepositoryImpl(this._httpClient);
 
-  static const String _userLoggedKey = 'userLogged';
+  static const String userLoggedKey = 'userLogged';
 
   @override
   Future<Either<Failure, User>> login(String email, String password) async {
@@ -33,7 +33,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
       final sharedPrefs = await SharedPreferences.getInstance();
 
-      await sharedPrefs.setString(_userLoggedKey, user.id);
+      await sharedPrefs.setString(userLoggedKey, user.id);
 
       return Right(user);
     } on ServerException {
@@ -44,6 +44,26 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return const Left(BadRequestFailure());
     } catch (e) {
       return const Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<bool> isLogged() async {
+    try {
+      final sharedPrefs = await SharedPreferences.getInstance();
+
+      final userLogged = sharedPrefs.getString(userLoggedKey);
+
+      if (userLogged == null) return false;
+
+      final response =
+          await _httpClient.get<Map<String, dynamic>>('/login/$userLogged');
+
+      if (response == null) return false;
+
+      return response['id'] == userLogged;
+    } catch (e) {
+      return false;
     }
   }
 }
