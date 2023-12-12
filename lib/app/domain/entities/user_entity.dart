@@ -16,4 +16,17 @@ class User {
       token: map['token'],
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is User &&
+        other.id == id &&
+        other.email == email &&
+        other.token == token;
+  }
+
+  @override
+  int get hashCode => id.hashCode ^ email.hashCode ^ token.hashCode;
 }
