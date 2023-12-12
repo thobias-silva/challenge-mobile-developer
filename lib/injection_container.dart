@@ -5,6 +5,7 @@ import 'app/data/adapters/http_client_adapter.dart';
 import 'app/data/repositories/authentication_repository_impl.dart';
 import 'app/domain/repositories/authentication_repository.dart';
 import 'app/domain/usecases/login_usecase.dart';
+import 'app/domain/usecases/user_is_logged_usecase.dart';
 
 final sl = GetIt.I;
 
@@ -27,4 +28,5 @@ void initializeServiceLocator() {
 
   // Usecases
   sl.registerLazySingleton(() => LoginUsecase(sl()));
+  sl.registerLazySingleton(() => UserIsLoggedUsecase(sl()));
 }
