@@ -5,5 +5,8 @@ class UserIsLoggedUsecase {
 
   const UserIsLoggedUsecase(this._repository);
 
-  Future<bool> call() => _repository.isLogged();
+  Future<bool> call() async {
+    await Future.delayed(const Duration(seconds: 1));
+    return _repository.isLogged();
+  }
 }
