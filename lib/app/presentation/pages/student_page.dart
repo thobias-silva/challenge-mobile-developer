@@ -103,7 +103,11 @@ class _StudentPageState extends State<StudentPage> {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          _StudentForm(store, widget.onlyRead),
+                          _StudentForm(
+                            store,
+                            widget.onlyRead,
+                            !isNew,
+                          ),
                           const Spacer(),
                           const SizedBox(height: 16),
                           if (!widget.onlyRead)
@@ -134,7 +138,13 @@ class _StudentPageState extends State<StudentPage> {
 class _StudentForm extends StatelessWidget {
   final StudentStore store;
   final bool readOnly;
-  _StudentForm(this.store, this.readOnly);
+  final bool isEditing;
+
+  _StudentForm(
+    this.store,
+    this.readOnly,
+    this.isEditing,
+  );
 
   String? validator(String? value) {
     if (value == null) return null;
@@ -199,7 +209,7 @@ class _StudentForm extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           TextFormField(
-            readOnly: readOnly,
+            readOnly: readOnly || isEditing,
             controller: _cpfController,
             onChanged: (value) => store.setCpf(int.tryParse(value) ?? 0),
             decoration: const InputDecoration(
@@ -209,7 +219,7 @@ class _StudentForm extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           TextFormField(
-            readOnly: readOnly,
+            readOnly: readOnly || isEditing,
             controller: _academicRecordController,
             onChanged: (value) =>
                 store.setAcademicRecord(int.tryParse(value) ?? 0),
