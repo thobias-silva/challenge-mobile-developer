@@ -18,8 +18,14 @@ abstract class Routes {
     login: (context) => const LoginPage(),
     home: (context) => const HomePage(),
     student: (context) {
-      final id = ModalRoute.of(context)?.settings.arguments as String?;
-      return StudentPage(id: id);
+      final args =
+          ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      final String? id = args?['id'];
+      final bool? onlyRead = args?['onlyRead'];
+      return StudentPage(
+        id: id,
+        onlyRead: onlyRead ?? false,
+      );
     },
   };
 }
