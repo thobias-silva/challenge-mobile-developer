@@ -2,16 +2,16 @@ import 'package:dartz/dartz.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../core/errors/failures.dart';
-import '../../domain/usecases/login_usecase.dart';
+import '../../domain/repositories/authentication_repository.dart';
 
 part 'login_store.g.dart';
 
 class LoginStore = _LoginStore with _$LoginStore;
 
 abstract class _LoginStore with Store {
-  final LoginUsecase _usecase;
+  final AuthenticationRepository _repository;
 
-  _LoginStore(this._usecase);
+  _LoginStore(this._repository);
 
   String email = '';
   String password = '';
@@ -27,7 +27,7 @@ abstract class _LoginStore with Store {
     failure = null;
     isLoading = true;
 
-    final resultOrError = await _usecase(email: email, password: password);
+    final resultOrError = await _repository.login(email, password);
 
     isLoading = false;
 

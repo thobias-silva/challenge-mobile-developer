@@ -3,9 +3,9 @@ import 'package:get_it/get_it.dart';
 
 import 'app/data/adapters/http_client_adapter.dart';
 import 'app/data/repositories/authentication_repository_impl.dart';
+import 'app/data/repositories/student_repository_impl.dart';
 import 'app/domain/repositories/authentication_repository.dart';
-import 'app/domain/usecases/login_usecase.dart';
-import 'app/domain/usecases/user_is_logged_usecase.dart';
+import 'app/domain/repositories/student_repository.dart';
 
 final sl = GetIt.I;
 
@@ -25,8 +25,6 @@ void initializeServiceLocator() {
   // Repositories
   sl.registerLazySingleton<AuthenticationRepository>(
       () => AuthenticationRepositoryImpl(sl()));
-
-  // Usecases
-  sl.registerLazySingleton(() => LoginUsecase(sl()));
-  sl.registerLazySingleton(() => UserIsLoggedUsecase(sl()));
+  sl.registerLazySingleton<StudentRepository>(
+      () => StudentRepositoryImpl(sl()));
 }
