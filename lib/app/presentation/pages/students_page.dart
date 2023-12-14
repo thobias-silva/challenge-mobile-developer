@@ -68,17 +68,32 @@ class _StudentsPageState extends State<StudentsPage> {
   }
 
   void deleteStudent(String id) async {
-    await store.deleteStudent(id);
-    store.refresh();
-    if (!mounted) return;
+    // await store.deleteStudent(id);
+    // store.refresh();
+    // if (!mounted) return;
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Aluno excluído com sucesso!'),
+        title: const Text('Deseja excluir este aluno?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await store.deleteStudent(id);
+              store.refresh();
+              if (!mounted) return;
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Aluno excluído com sucesso!'),
+                ),
+              );
+            },
+            child: const Text('Excluir'),
           ),
         ],
       ),
