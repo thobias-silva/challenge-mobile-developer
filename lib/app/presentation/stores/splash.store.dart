@@ -1,9 +1,9 @@
-import '../../domain/usecases/user_is_logged_usecase.dart';
+import '../../domain/repositories/authentication_repository.dart';
 
 class SplashStore {
-  final UserIsLoggedUsecase _userIsLoggedUsecase;
+  final AuthenticationRepository _repository;
 
-  const SplashStore(this._userIsLoggedUsecase);
+  const SplashStore(this._repository);
 
-  Future<bool> userIsLogged() => _userIsLoggedUsecase();
+  Future<bool> userIsLogged() => _repository.isLogged();
 }

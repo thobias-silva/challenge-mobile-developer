@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../../core/routes/routes.dart';
+import '../../../injection_container.dart';
+import '../../domain/entities/stundent_entity.dart';
+import '../stores/students_store.dart';
 
 class StudentsPage extends StatefulWidget {
   const StudentsPage({super.key});
@@ -10,8 +14,75 @@ class StudentsPage extends StatefulWidget {
 }
 
 class _StudentsPageState extends State<StudentsPage> {
-  void addStudent() {
-    Navigator.of(context).pushNamed(Routes.student);
+  final StudentsStore store = StudentsStore(sl());
+
+  @override
+  void initState() {
+    super.initState();
+    store.getStudents();
+  }
+
+  void addStudent() async {
+    await Navigator.of(context).pushNamed(Routes.student);
+    store.refresh();
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Aluno adicionado com sucesso!'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void updateStudent(String id) async {
+    await Navigator.of(context).pushNamed(Routes.student, arguments: {
+      'id': id,
+    });
+    store.refresh();
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Aluno editado com sucesso!'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void openStudent(String id) async {
+    Navigator.of(context).pushNamed(Routes.student, arguments: {
+      'id': id,
+      'onlyRead': true,
+    });
+  }
+
+  void deleteStudent(String id) async {
+    await store.deleteStudent(id);
+    store.refresh();
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Aluno excluído com sucesso!'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -22,25 +93,51 @@ class _StudentsPageState extends State<StudentsPage> {
       ),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(16),
+          Padding(
+            padding: const EdgeInsets.all(16),
             child: TextField(
-              decoration: InputDecoration(
+              onChanged: (value) => store.filterText = value,
+              decoration: const InputDecoration(
                 hintText: 'Buscar...',
                 prefixIcon: Icon(Icons.search),
               ),
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 80),
-              itemCount: 10,
-              itemBuilder: (context, index) => _StudentCard(
-                onEditPressed: () {},
-                onDeletePressed: () {},
-                onPressed: () {},
-              ),
-            ),
+            child: Observer(builder: (context) {
+              if (store.isLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              if (store.failure != null) {
+                return Center(
+                  child:
+                      Text(store.failure?.message ?? 'Ops! Algo deu errado.'),
+                );
+              }
+
+              if (store.state.isEmpty) {
+                return const Center(
+                  child: Text('Nenhum aluno encontrado.'),
+                );
+              }
+
+              return ListView.builder(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 80),
+                itemCount: store.state.length,
+                itemBuilder: (context, index) {
+                  final student = store.state[index];
+                  return _StudentCard(
+                    student: student,
+                    onEditPressed: () => updateStudent(student.id),
+                    onDeletePressed: () => deleteStudent(student.id),
+                    onPressed: () => openStudent(student.id),
+                  );
+                },
+              );
+            }),
           ),
         ],
       ),
@@ -55,11 +152,13 @@ class _StudentsPageState extends State<StudentsPage> {
 }
 
 class _StudentCard extends StatelessWidget {
+  final Student student;
   final void Function()? onEditPressed;
   final void Function()? onDeletePressed;
   final void Function()? onPressed;
 
   const _StudentCard({
+    required this.student,
     required this.onEditPressed,
     required this.onDeletePressed,
     required this.onPressed,
@@ -86,11 +185,11 @@ class _StudentCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Thobias Silva',
+                        student.name,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
-                      const Text('15843'),
-                      const Text('CPF: 123.456.789-00')
+                      Text(student.academicRecord.toString()),
+                      Text('CPF: ${student.cpf}')
                     ],
                   ),
                 ),
