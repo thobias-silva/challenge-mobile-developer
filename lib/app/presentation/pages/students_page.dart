@@ -23,41 +23,46 @@ class _StudentsPageState extends State<StudentsPage> {
   }
 
   void addStudent() async {
-    await Navigator.of(context).pushNamed(Routes.student);
+    final res = await Navigator.of(context).pushNamed(Routes.student);
     store.refresh();
     if (!mounted) return;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Aluno adicionado com sucesso!'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
+    if (res == true) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Aluno adicionado com sucesso!'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void updateStudent(String id) async {
-    await Navigator.of(context).pushNamed(Routes.student, arguments: {
+    final res =
+        await Navigator.of(context).pushNamed(Routes.student, arguments: {
       'id': id,
     });
     store.refresh();
     if (!mounted) return;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Aluno editado com sucesso!'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
+    if (res == true) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Aluno editado com sucesso!'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void openStudent(String id) async {
