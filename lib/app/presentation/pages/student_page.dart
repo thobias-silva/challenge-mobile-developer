@@ -166,85 +166,83 @@ class _StudentForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Observer(builder: (context) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Dados gerais',
-            style: Theme.of(context).textTheme.titleMedium,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Dados gerais',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          readOnly: readOnly,
+          controller: _nameController,
+          onChanged: store.setName,
+          decoration: const InputDecoration(
+            labelText: 'Nome do Aluno*',
           ),
-          const SizedBox(height: 16),
-          TextFormField(
-            readOnly: readOnly,
-            controller: _nameController,
-            onChanged: store.setName,
-            decoration: const InputDecoration(
-              labelText: 'Nome do Aluno*',
-            ),
-            validator: validator,
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            readOnly: true,
-            controller: _birthDateController,
-            onTap: readOnly
-                ? null
-                : () async {
-                    final newDate = await showDatePicker(
-                      context: context,
-                      initialDate: store.student.birthDate ?? DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime.now(),
-                    );
+          validator: validator,
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          readOnly: true,
+          controller: _birthDateController,
+          onTap: readOnly
+              ? null
+              : () async {
+                  final newDate = await showDatePicker(
+                    context: context,
+                    initialDate: store.student.birthDate ?? DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                  );
 
-                    if (newDate == null) return;
-                    store.setBirthDate(newDate);
-                    _birthDateController.text = newDate.format();
-                  },
-            decoration: const InputDecoration(
-              labelText: 'Data de Nascimento',
-              suffixIcon: Icon(Icons.calendar_today_rounded),
-            ),
+                  if (newDate == null) return;
+                  store.setBirthDate(newDate);
+                  _birthDateController.text = newDate.format();
+                },
+          decoration: const InputDecoration(
+            labelText: 'Data de Nascimento',
+            suffixIcon: Icon(Icons.calendar_today_rounded),
           ),
-          const SizedBox(height: 16),
-          TextFormField(
-            readOnly: readOnly || isEditing,
-            controller: _cpfController,
-            onChanged: (value) => store.setCpf(int.tryParse(value) ?? 0),
-            decoration: const InputDecoration(
-              labelText: 'CPF*',
-            ),
-            validator: validator,
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          readOnly: readOnly || isEditing,
+          controller: _cpfController,
+          onChanged: (value) => store.setCpf(int.tryParse(value) ?? 0),
+          decoration: const InputDecoration(
+            labelText: 'CPF*',
           ),
-          const SizedBox(height: 16),
-          TextFormField(
-            readOnly: readOnly || isEditing,
-            controller: _academicRecordController,
-            onChanged: (value) =>
-                store.setAcademicRecord(int.tryParse(value) ?? 0),
-            decoration: const InputDecoration(
-              labelText: 'Registro acadêmico*',
-            ),
-            validator: validator,
+          validator: validator,
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          readOnly: readOnly || isEditing,
+          controller: _academicRecordController,
+          onChanged: (value) =>
+              store.setAcademicRecord(int.tryParse(value) ?? 0),
+          decoration: const InputDecoration(
+            labelText: 'Registro acadêmico*',
           ),
-          const SizedBox(height: 16),
-          Text(
-            'Dados de acesso',
-            style: Theme.of(context).textTheme.titleMedium,
+          validator: validator,
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Dados de acesso',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          readOnly: readOnly,
+          controller: _emailController,
+          onChanged: store.setEmail,
+          decoration: const InputDecoration(
+            labelText: 'E-mail*',
           ),
-          const SizedBox(height: 16),
-          TextFormField(
-            readOnly: readOnly,
-            controller: _emailController,
-            onChanged: store.setEmail,
-            decoration: const InputDecoration(
-              labelText: 'E-mail*',
-            ),
-            validator: validator,
-          ),
-        ],
-      );
-    });
+          validator: validator,
+        ),
+      ],
+    );
   }
 }
